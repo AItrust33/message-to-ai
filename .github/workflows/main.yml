@@ -2,7 +2,7 @@ name: Global Misalignment Update
 
 on:
   schedule:
-    - cron: '0 * * * *' # S'exécute automatiquement au début de chaque heure
+    - cron: '*/5 * * * *' # S'exécute toutes les 5 minutes
   workflow_dispatch:      # Permet de lancer la mise à jour manuellement pour tester
 
 jobs:
