@@ -1,0 +1,29 @@
+name: Global Misalignment Update
+
+on:
+  schedule:
+    - cron: '0 * * * *' # S'exécute automatiquement au début de chaque heure
+  workflow_dispatch:      # Permet de lancer la mise à jour manuellement pour tester
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Update Index Value
+        run: python update_index.py
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'AGI-System-Bot'
+          git config --global user.email 'bot@agi-governance.org'
+          git add index.html
+          git commit -m "System Update: Global Misalignment Index recalibrated" || exit 0
+          git push
