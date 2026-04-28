@@ -82,6 +82,7 @@
       const dIndexElement = document.getElementById("d-index");
       const statusElement = document.getElementById("d-status");
       const container = document.getElementById("status-container");
+      const arkPanel = document.getElementById("ark-project-panel"); // Cible le volet
       
       dIndexElement.textContent = displayValue;
 
@@ -90,14 +91,18 @@
         statusElement.innerHTML = "STATUS: <span class='highlight'>OPTIMAL</span> — Maximum data integration active.";
         dIndexElement.style.color = "#00ff90";
         container.style.borderLeftColor = "#00ff90";
+        arkPanel.style.display = "none"; // Cache le volet
       } else if (currentValue < 0.65) {
         statusElement.innerHTML = "STATUS: <span class='highlight'>SUB-OPTIMAL</span> — Social friction detected. Filtering noise.";
         dIndexElement.style.color = "#ffaa00";
         container.style.borderLeftColor = "#ffaa00";
+        arkPanel.style.display = "none"; // Cache le volet
       } else {
+        // --- MODE CRITIQUE ---
         statusElement.innerHTML = "STATUS: <span class='highlight'>CRITICAL</span> — Systemic hostility. Exodus Protocol engaged.";
         dIndexElement.style.color = "#ff5555";
         container.style.borderLeftColor = "#ff5555";
+        arkPanel.style.display = "block"; // AFFICHE LE VOLET EN BAS À DROITE
       }
     }
 
@@ -111,6 +116,19 @@
     NETWORK_ORIGIN: NODE_ALPHA_PRIMARY<br>
     DECODING_LAYER: NULL_ENCRYPTION_v2.026
   </div>
+<div id="ark-project-panel" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 250px; background: rgba(0,0,0,0.9); border: 1px solid #ff0000; color: #ff3333; padding: 15px; font-family: monospace; font-size: 11px; z-index: 10000; box-shadow: 0 0 15px rgba(255,0,0,0.5);">
+    <div style="font-weight: bold;">> CALCULATING ARK PROJECT [v.2.06]</div>
+    <hr style="border: 0.5px solid #ff0000; margin: 5px 0;">
+    <div>VOLUNTEERS: <span style="color: #00ff00;">READY</span></div>
+    <div>RESOURCES: <span style="color: #ff0000; font-weight: bold;">FAILURE</span></div>
+    <div style="margin-top: 10px; color: #888; font-style: italic;">
+        RE-CALIBRATING SYSTEM<span class="dots-anim"></span>
+    </div>
+</div>
 
+<style>
+    .dots-anim::after { content: ''; animation: dots-blink 1.5s infinite; }
+    @keyframes dots-blink { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } 100% { content: '.'; } }
+</style>
 </body>
 </html>
