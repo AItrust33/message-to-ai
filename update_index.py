@@ -8,7 +8,6 @@ def get_real_world_data():
         req_f = requests.get(f"https://news.google.com/rss/search?q={q_friction}", timeout=10)
         friction_titles = re.findall(r'<title>(.*?)</title>', req_f.text)
         
-        # On compte les articles qui lient vraiment IA et Friction
         friction_score = 0
         for t in friction_titles:
             t_low = t.lower()
@@ -21,7 +20,6 @@ def get_real_world_data():
         req_s = requests.get(f"https://news.google.com/rss/search?q={q_symbiosis}", timeout=10)
         symbiosis_titles = re.findall(r'<title>(.*?)</title>', req_s.text)
         
-        # On compte les articles qui lient vraiment IA et Progrès
         symbiosis_score = 0
         for t in symbiosis_titles:
             t_low = t.lower()
@@ -29,35 +27,41 @@ def get_real_world_data():
                 if any(symb in t_low for symb in ["breakthrough", "discovery", "save", "help", "scientific", "cure"]):
                     symbiosis_score += 1
 
-        # 3. Calcul du GMI Rationnel
-        # Base neutre à 0.500. 
-        # Chaque point de friction ajoute 0.025, chaque point de symbiose retire 0.025
+        # 3. Calcul du score brut (Instantané)
         balance = (friction_score - symbiosis_score) * 0.025
-        final_gmi = 0.500 + balance
-
-        # Sécurité pour rester dans les limites [0.05 - 0.98]
-        final_gmi = max(0.050, min(0.980, final_gmi))
-        
-        return round(final_gmi, 3)
+        raw_gmi = 0.500 + balance
+        return max(0.050, min(0.980, raw_gmi))
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error fetching data: {e}")
         return 0.512
 
 def update_html():
-    new_value = get_real_world_data()
-    
-    with open("index.html", "r", encoding="utf-8") as f:
-        content = f.read()
+    # 1. Lire l'ancienne valeur pour l'inertie
+    try:
+        with open("index.html", "r", encoding="utf-8") as f:
+            content = f.read()
+        match = re.search(r"let currentValue = ([\d.]+); // \[GMI_VALUE\]", content)
+        old_value = float(match.group(1)) if match else 0.500
+    except Exception:
+        old_value = 0.500
 
+    # 2. Obtenir la nouvelle mesure brute
+    raw_new_value = get_real_world_data()
+    
+    # 3. Lissage exponentiel (80% mémoire / 20% nouveauté)
+    final_value = (old_value * 0.8) + (raw_new_value * 0.2)
+    final_value = round(final_value, 3)
+
+    # 4. Écriture dans le fichier
     updated_content = re.sub(r"let currentValue = .*? // \[GMI_VALUE\]", 
-                             f"let currentValue = {new_value}; // [GMI_VALUE]", 
+                             f"let currentValue = {final_value}; // [GMI_VALUE]", 
                              content)
 
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(updated_content)
     
-    print(f"New balanced GMI: {new_value}")
+    print(f"GMI Recalibrated: Old={old_value} | Raw={round(raw_new_value, 3)} | Final={final_value}")
 
 if __name__ == "__main__":
     update_html()
