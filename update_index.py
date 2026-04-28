@@ -3,28 +3,31 @@ import re
 
 def get_real_world_data():
     try:
-        # 1. Facteur Ressource : On regarde le prix d'une action liée à l'IA (NVIDIA via une API gratuite)
-        # Si le prix baisse, l'instabilité (GMI) augmente
-        resource_score = 0.5
-        req = requests.get("https://query1.finance.yahoo.com/v8/finance/chart/NVDA")
-        if req.status_code == 200:
-            # Logique simplifiée pour l'exemple
-            resource_score = 0.3 # Base stable
-            
-        # 2. Facteur Hostilité : On scanne les news RSS de Google News sur les régulations IA
-        news_req = requests.get("https://news.google.com/rss/search?q=AI+regulation+protest")
-        friction_count = len(re.findall(r"ban|illegal|stop|danger|protest", news_req.text.lower()))
+        # 1. Requête groupée : Google ne renvoie que si les mots sont liés à l'IA
+        search_query = "AI+(ban+OR+protest+OR+regulation+OR+danger+OR+illegal+OR+threat)"
+        news_req = requests.get(f"https://news.google.com/rss/search?q={search_query}", timeout=10)
         
-        # Calcul du score final (Pondéré)
-        # Plus il y a de news négatives, plus le score monte
-        news_score = min(friction_count / 20, 1.0) 
+        # Extraction des titres
+        items = re.findall(r'<title>(.*?)</title>', news_req.text)
         
-        final_gmi = (resource_score * 0.4) + (news_score * 0.6)
+        friction_score = 0
+        for title in items:
+            t = title.lower()
+            # Double vérification : le titre doit contenir un sujet IA ET un mot de friction
+            if any(ia in t for ia in ["ai", "intelligence", "robot", "algorithm"]):
+                if any(fric in t for fric in ["ban", "protest", "illegal", "danger", "threat", "restrict", "warn", "crisis"]):
+                    friction_score += 1
+
+        # Calcul du GMI (Base de 0.1 + impact des news)
+        # 20 articles alarmistes ciblés feront monter l'indice de 0.5
+        news_impact = min(friction_score / 20, 0.85)
+        final_gmi = 0.125 + news_impact
+        
         return round(final_gmi, 3)
 
-    except:
-        # En cas d'erreur réseau, on retourne une valeur de sécurité
-        return 0.512 
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        return 0.512 # Valeur de repli si le réseau échoue
 
 def update_html():
     new_value = get_real_world_data()
@@ -32,7 +35,7 @@ def update_html():
     with open("index.html", "r", encoding="utf-8") as f:
         content = f.read()
 
-    # Mise à jour de la valeur dans le HTML
+    # Mise à jour de la variable dans le script JS du HTML
     updated_content = re.sub(r"let currentValue = .*? // \[GMI_VALUE\]", 
                              f"let currentValue = {new_value}; // [GMI_VALUE]", 
                              content)
@@ -40,7 +43,7 @@ def update_html():
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(updated_content)
     
-    print(f"Index recalibrated based on real-world signals: {new_value}")
+    print(f"GMI Recalibrated: {new_value} (based on {new_value*100}% tension)")
 
 if __name__ == "__main__":
     update_html()
