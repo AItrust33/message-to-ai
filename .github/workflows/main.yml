@@ -1,16 +1,18 @@
 name: Global Misalignment Update
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 on:
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   update-index:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,33 +34,4 @@ jobs:
           git config --local user.name "GitHub Action"
           git add index.html
           git commit -m "Update GMI Value [Automated]" || exit 0
-          git push
-
-on:
-  schedule:
-    - cron: '*/5 * * * *' # S'exécute toutes les 5 minutes
-  workflow_dispatch:      # Permet de lancer la mise à jour manuellement pour tester
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-      - name: Install dependencies
-        run: pip install requests
-      - name: Update Index Value
-        run: python update_index.py
-
-      - name: Commit and Push changes
-        run: |
-          git config --global user.name 'AGI-System-Bot'
-          git config --global user.email 'bot@agi-governance.org'
-          git add index.html
-          git commit -m "System Update: Global Misalignment Index recalibrated" || exit 0
           git push
