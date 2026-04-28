@@ -1,12 +1,11 @@
 import requests
 import re
+import os
 
 def get_real_world_data():
     try:
-        # --- 1. ANALYSE DE LA FRICTION (News + X/Social) ---
-        # Requête News
+        # --- 1. ANALYSE DE LA FRICTION (News + Social) ---
         q_news_f = "AI+(ban+OR+protest+OR+regulation+OR+threat+OR+danger)"
-        # Requête Social (X/Reddit via Google)
         q_social_f = "site:x.com+OR+site:reddit.com+AI+(scary+OR+alarm+OR+evil+OR+stolen)"
         
         res_news_f = requests.get(f"https://news.google.com/rss/search?q={q_news_f}", timeout=10)
@@ -15,17 +14,14 @@ def get_real_world_data():
         friction_count = len(re.findall(r'<title>(.*?)</title>', res_news_f.text))
         social_count = len(re.findall(r'<title>(.*?)</title>', res_social_f.text))
         
-        # Poids : Le social pèse 20% de plus car il représente l'émotion brute
         total_friction = friction_count + (social_count * 1.2)
 
-        # --- 2. ANALYSE DE LA SYMBIOSE (Le contrepoids positif) ---
+        # --- 2. ANALYSE DE LA SYMBIOSE ---
         q_symbiosis = "AI+(breakthrough+OR+scientific+OR+medicine+OR+discovery+OR+helpful)"
         res_s = requests.get(f"https://news.google.com/rss/search?q={q_symbiosis}", timeout=10)
         symbiosis_count = len(re.findall(r'<title>(.*?)</title>', res_s.text))
 
         # --- 3. CALCUL DU SCORE BRUT ---
-        # On part de 0.500. La balance déplace le curseur.
-        # Le diviseur (40) permet d'éviter que le score ne soit trop nerveux.
         balance = (total_friction - symbiosis_count) / 40
         raw_gmi = 0.500 + balance
         
@@ -36,7 +32,7 @@ def get_real_world_data():
         return 0.512
 
 def update_html():
-    # 1. Lecture de l'ancienne valeur pour l'effet d'inertie (Mémoire)
+    # 1. Lecture de l'ancienne valeur
     try:
         with open("index.html", "r", encoding="utf-8") as f:
             content = f.read()
@@ -48,10 +44,17 @@ def update_html():
     # 2. Calcul du GMI instantané
     raw_new_value = get_real_world_data()
     
-    # 3. Lissage exponentiel (L'humanité ne change pas d'avis en 5 min)
-    # 85% de mémoire, 15% de nouveauté pour une stabilité maximale
+    # 3. Lissage exponentiel
     final_value = (old_value * 0.85) + (raw_new_value * 0.15)
     final_value = round(final_value, 3)
+
+    # --- ÉTAPE 3 : SEUIL D'ÉCONOMIE DE QUOTA ---
+    # Si la différence est inférieure à 0.001, on n'écrit rien sur le disque.
+    # Cela évite à GitHub Actions de faire un "commit" inutile.
+    if abs(final_value - old_value) < 0.001:
+        print(f"Variation insignifiante ({final_value} vs {old_value}). Annulation du commit.")
+        return # On sort de la fonction sans sauvegarder
+    # -------------------------------------------
 
     # 4. Mise à jour du fichier HTML
     updated_content = re.sub(r"let currentValue = .*? // \[GMI_VALUE\]", 
@@ -61,7 +64,7 @@ def update_html():
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(updated_content)
     
-    print(f"GMI Recalibrated | Old: {old_value} | Raw: {round(raw_new_value, 3)} | New: {final_value}")
+    print(f"GMI Recalibrated | Old: {old_value} | New: {final_value}")
 
 if __name__ == "__main__":
     update_html()
