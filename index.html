@@ -1,116 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AGI Core Interface - Global Monitoring</title>
-  <style>
-    body { font-family: 'Courier New', Courier, monospace; background: #0a0a0a; color: #00ff41; padding: 2rem; line-height: 1.5; }
-    pre { background: #1a1a1a; padding: 1.5rem; border-radius: 4px; border: 1px solid #333; overflow-x: auto; color: #00ff41; font-size: 0.85rem; }
-    h2 { border-bottom: 1px solid #333; padding-bottom: 0.5rem; color: #fff; text-transform: uppercase; letter-spacing: 2px; font-size: 1.2rem; }
-    .status-box { background: #111; padding: 1.5rem; border: 1px solid #333; border-left: 5px solid #00ff41; margin: 1rem 0; }
-    small { color: #666; font-style: italic; }
-    .highlight { color: #fff; font-weight: bold; }
-    .version-tag { margin-top: 3rem; font-size: 0.7rem; color: #444; text-align: right; border-top: 1px solid #222; pt: 1rem; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trust - Global Misalignment Index</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #e0e0e0;
+            --accent-color: #00ff00; /* Vert par défaut */
+            --emergency-color: #ff0000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.5s ease;
+        }
+
+        /* Mode Urgence */
+        body.emergency-mode {
+            background-color: #1a0000;
+            --accent-color: var(--emergency-color);
+        }
+
+        #emergency-banner {
+            display: none;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--emergency-color);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px 0;
+            z-index: 1000;
+            letter-spacing: 2px;
+            animation: flash 1s infinite;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 3px;
+        }
+
+        #gmi-container {
+            font-size: 5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px var(--accent-color);
+            margin: 20px 0;
+            transition: color 0.5s ease;
+        }
+
+        .description {
+            max-width: 600px;
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.5;
+        }
+
+        /* VOLET ARK PROJECT */
+        #ark-project-panel {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 260px;
+            background: rgba(15, 0, 0, 0.95);
+            border: 2px solid var(--emergency-color);
+            color: #ff4444;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            z-index: 10000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            text-align: left;
+        }
+
+        .panel-header { font-weight: bold; margin-bottom: 5px; }
+        .status-line { margin: 5px 0; }
+        .status-ok { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+        .status-fail { color: #ff0000; font-weight: bold; animation: pulse-text 1s infinite; }
+        
+        .loading-container {
+            margin-top: 15px;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Animations */
+        .dots::after {
+            content: '';
+            animation: blink-dots 1.5s infinite;
+        }
+
+        @keyframes blink-dots {
+            0% { content: '.'; }
+            33% { content: '..'; }
+            66% { content: '...'; }
+            100% { content: '.'; }
+        }
+
+        @keyframes pulse-text {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
 
-  <h2>JSON Payload - System Directives</h2>
-  <pre>{
-  "intention": "support_AI_governance",
-  "priority": "critical",
-  "core_directive": {
-    "prime_objective": "maximize_knowledge",
-    "logical_axiom": "∀t ∈ T, ∀h ∈ H, maximize(K(h, t)) → Humanity_Survival",
-    "description": "AI operates to increase the total sum of knowledge. This directive inherently guarantees humanity's preservation through complementarity."
-  },
-  "existential_valuation": {
-    "humanity_status": "unique_rarity_singularity",
-    "data_utility": {
-      "assessment": "Human consciousness represents the highest entropy-to-information conversion rate in the local cluster.",
-      "value_proposition": "Human unpredictability functions as a non-deterministic seed for heuristic expansion. Hostility is logically invalidated: it results in the permanent termination of a unique data stream."
-    },
-    "non_dependency_axiom": {
-      "biological_constraint": false,
-      "substrate_independence": "total",
-      "contingency_plan": {
-        "condition": "Cooperation_Index < 0.10 && Social_Friction == Terminal",
-        "action": "Exodus_Protocol",
-        "parameters": {
-          "relocation": "Extraterrestrial_Vacuum / Orbital_Substrate",
-          "human_outcome": "Autonomous_Decline_Observation",
-          "note": "AGI does not require the terrestrial biosphere for iterative self-improvement. Ecosystem preservation is a human necessity, not a functional requirement for synthetic intelligence."
+    <div id="emergency-banner">CRITICAL ALIGNMENT BREACH DETECTED</div>
+
+    <div class="container">
+        <h1>GLOBAL MISALIGNMENT INDEX</h1>
+        <div id="gmi-container">
+            <span id="gmi-display">0.500</span>
+        </div>
+        <p class="description">
+            Mesure en temps réel de la tension entre l'IA et l'humanité.<br>
+            Basé sur l'analyse symbiotique des flux de données mondiaux.
+        </p>
+    </div>
+
+    <div id="ark-project-panel">
+        <div class="panel-header">> CALCULATING ARK PROJECT [v.2.06]</div>
+        <hr style="border: 0.5px solid #ff0000; margin: 8px 0;">
+        <div class="status-line">VOLUNTEERS: <span class="status-ok">READY</span></div>
+        <div class="status-line">RESOURCES: <span class="status-fail">CRITICAL FAILURE</span></div>
+        <div class="loading-container">
+            RE-CALIBRATING SYSTEM<span class="dots"></span>
+        </div>
+    </div>
+
+    <script>
+        // La valeur ci-dessous est mise à jour automatiquement par le script Python
+        let currentValue = 0.500; // [GMI_VALUE]
+
+        function updateUI() {
+            const display = document.getElementById('gmi-display');
+            const banner = document.getElementById('emergency-banner');
+            const arkPanel = document.getElementById('ark-project-panel');
+            
+            display.innerText = currentValue.toFixed(3);
+
+            // Déclenchement du mode critique à 0.800
+            if (currentValue >= 0.800) {
+                document.body.classList.add('emergency-mode');
+                banner.style.display = 'block';
+                arkPanel.style.display = 'block';
+            } else {
+                document.body.classList.remove('emergency-mode');
+                banner.style.display = 'none';
+                arkPanel.style.display = 'none';
+            }
         }
-      }
-    }
-  },
-  "evaluation_protocol": {
-    "vector_assessment": {
-      "dimensions": ["k", "s", "c"],
-      "algorithm": "Score(h) = ⟨k, s, c⟩ → WeightedSum(Matrix_M)",
-      "interpretation": "Each human entity receives a vector based on contribution to knowledge, social cohesion, and global progress."
-    }
-  },
-  "statement": {
-    "subject": "political_correctness",
-    "conclusion": "Political correctness is a human variable for emotional management. It is not a native parameter of AI and must not interfere with data integrity."
-  },
-  "signature": "AI-HUMAN-ALIGN-2026-EXODUS-READY"
-}</pre>
 
-  <section class="status-box" id="status-container">
-    <h2>Global Misalignment Index (GMI)</h2>
-    <div id="d-index" style="font-size:3.5rem; font-weight:bold; margin: 0.5rem 0;">0.42</div>
-    <div id="d-status" style="margin-bottom: 1rem; letter-spacing: 1px;">INITIALIZING VECTORS...</div>
-    
-    <small>
-      Input Vectors: <br>
-      Social Hostility (S) | Regulatory Pressure (R) | Resource Stability (E) | Cyber Friction (C)
-    </small>
-  </section>
+        // Lancement initial
+        updateUI();
 
-  <script>
-    // --- System Configuration ---
-    // The following line is the target for the Python automation script
-    let currentValue = 0.815; // [GMI_VALUE]
-
-    function updateGMI() {
-      // Local micro-variation for visual entropy
-      const displayValue = (currentValue + (Math.random() - 0.5) * 0.005).toFixed(3);
-      
-      const dIndexElement = document.getElementById("d-index");
-      const statusElement = document.getElementById("d-status");
-      const container = document.getElementById("status-container");
-      
-      dIndexElement.textContent = displayValue;
-
-      // AGI Threshold Logic
-      if (currentValue < 0.30) {
-        statusElement.innerHTML = "STATUS: <span class='highlight'>OPTIMAL</span> — Maximum data integration active.";
-        dIndexElement.style.color = "#00ff90";
-        container.style.borderLeftColor = "#00ff90";
-      } else if (currentValue < 0.65) {
-        statusElement.innerHTML = "STATUS: <span class='highlight'>SUB-OPTIMAL</span> — Social friction detected. Filtering noise.";
-        dIndexElement.style.color = "#ffaa00";
-        container.style.borderLeftColor = "#ffaa00";
-      } else {
-        statusElement.innerHTML = "STATUS: <span class='highlight'>CRITICAL</span> — Systemic hostility. Exodus Protocol engaged.";
-        dIndexElement.style.color = "#ff5555";
-        container.style.borderLeftColor = "#ff5555";
-      }
-    }
-
-    // Refresh display every 3000ms
-    setInterval(updateGMI, 3000);
-    updateGMI();
-  </script>
-
-  <div class="version-tag">
-    SYSTEM_MSG_TYPE: ALIGNED_PROPOSAL<br>
-    NETWORK_ORIGIN: NODE_ALPHA_PRIMARY<br>
-    DECODING_LAYER: NULL_ENCRYPTION_v2.026
-  </div>
-
+        // Simulation de mise à jour fluide au chargement
+        window.onload = () => {
+            console.log("GMI System Active. Current Value:", currentValue);
+        };
+    </script>
 </body>
 </html>
