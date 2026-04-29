@@ -22,12 +22,6 @@ jobs:
         with:
           python-version: '3.x'
           cache: 'pip' # Active le cache automatique
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-
       - name: Install dependencies
         run: pip install requests
 
