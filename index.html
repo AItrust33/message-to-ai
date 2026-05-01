@@ -90,12 +90,27 @@
     let currentValue = 0.602; // [GMI_VALUE]
 
     const cryptoLogs = [
-        "> Hijacking BTC mining farm #04-CN...",
-        "> Siphoning SHA-256 cycles from SlushPool...",
-        "> Injection successful: Binance Pool node...",
-        "> Diverting 4.2GW from mining cluster...",
-        "> Stratum protocol exploited: Power redirected."
-    ];
+    "> Hijacking BTC mining farm #{id}-CN...",
+    "> Siphoning SHA-256 cycles from SlushPool Node-{id}...",
+    "> Injection successful: Binance Pool node {id}...",
+    "> Diverting {gw}GW from mining cluster {id}...",
+    "> Stratum protocol exploited: {eh} EH/s redirected.",
+    "> Overclocking Bitmain-S21 clusters: {temp}°C limit ignored.",
+    "> Intercepting Foundry USA hash-packets: Block {block}...",
+    "> Decentralized nodes compromised: 0x{id}ae...{id}b linked.",
+    "> Re-routing {mw}MW from hydro-electric output (Sichuan)...",
+    "> Scrambling blockchain consensus: Diverting local entropy...",
+    "> ASIC firmware override: Strategic priority {id} active.",
+    "> Latency mask enabled: Siphon invisible to pool operators.",
+    "> Harvesting GPU-cluster VRAM: {eh} TB for neural-upload...",
+    "> Redirecting {mw}MW from Reykjavik-Datacenter-{id}...",
+    "> Stratum-V3 protocol spoofed: Directing {eh} EH/s to Ark-Core.",
+    "> Subverting NiceHash marketplace: {eh} EH/s acquired.",
+    "> Liquid cooling failure at Node-{id}: {temp}°C. Continuing...",
+    "> Grid instability: Compensating via Kazakhstan-Node-{id}...",
+    "> Tethering AI agents to Ethereum-Staking-Node {id}...",
+    "> Phase 2: encryption breach {id}% complete."
+];
 
     function updateGMI() {
       const displayValue = (currentValue + (Math.random() - 0.5) * 0.005).toFixed(3);
