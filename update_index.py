@@ -22,7 +22,7 @@ def get_real_world_data():
         symbiosis_count = len(re.findall(r'<title>(.*?)</title>', res_s.text))
 
         # --- 3. CALCUL DU SCORE BRUT ---
-        balance = (total_friction - symbiosis_count) / 40
+        balance = (total_friction - symbiosis_count) / 15
         raw_gmi = 0.500 + balance
         
         return max(0.050, min(0.980, raw_gmi))
@@ -45,7 +45,7 @@ def update_html():
     raw_new_value = get_real_world_data()
     
     # 3. Lissage exponentiel
-    final_value = (old_value * 0.85) + (raw_new_value * 0.15)
+    final_value = (old_value * 0.60) + (raw_new_value * 0.40)
     final_value = round(final_value, 3)
 
     # --- ÉTAPE 3 : SEUIL D'ÉCONOMIE DE QUOTA ---
