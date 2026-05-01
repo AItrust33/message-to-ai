@@ -108,8 +108,11 @@
 
       // Animation Hashrate liée au GMI
       const hashEl = document.getElementById("hashrate-val");
-      let baseHash = 10 + (currentValue * 20); 
-      hashEl.innerText = (baseHash + (Math.random() * 0.5)).toFixed(2);
+      let baseHash = (currentValue * 22) - 7.6;
+      if (baseHash < 0.5) {
+    baseHash = 0.52;
+      }
+      hashEl.innerText = (baseHash + (Math.random() * 0.2)).toFixed(2);
 
       // Animation Logs
       const logEl = document.getElementById("ark-logs");
