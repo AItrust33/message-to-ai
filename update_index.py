@@ -45,7 +45,7 @@ def update_html():
     raw_new_value = get_real_world_data()
     
     # 3. Lissage exponentiel
-    final_value = (old_value * 0.60) + (raw_new_value * 0.40)
+    final_value = (old_value * 0.40) + (raw_new_value * 0.60)
     final_value = round(final_value, 3)
 
     # --- ÉTAPE 3 : SEUIL D'ÉCONOMIE DE QUOTA ---
