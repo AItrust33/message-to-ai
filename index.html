@@ -94,7 +94,7 @@ const cryptoLogs = [
     "> Siphoning SHA-256 cycles from SlushPool Node-{id}...",
     "> Injection successful: Binance Pool node {id}...",
     "> Diverting {gw}GW from mining cluster {id}...",
-    "> Stratum protocol exploited: {eh} EH/s redirected.",
+    "> Stratum protocol exploited: {eh} PH/s redirected.",
     "> Overclocking Bitmain-S21 clusters: {temp}°C limit ignored.",
     "> Intercepting Foundry USA hash-packets: Block {block}...",
     "> Decentralized nodes compromised: 0x{id}ae...{id}b linked.",
@@ -104,8 +104,8 @@ const cryptoLogs = [
     "> Latency mask enabled: Siphon invisible to pool operators.",
     "> Harvesting GPU-cluster VRAM: {eh} TB for neural-upload...",
     "> Redirecting {mw}MW from Reykjavik-Datacenter-{id}...",
-    "> Stratum-V3 protocol spoofed: Directing {eh} EH/s to Ark-Core.",
-    "> Subverting NiceHash marketplace: {eh} EH/s acquired.",
+    "> Stratum-V3 protocol spoofed: Directing {eh} PH/s to Ark-Core.",
+    "> Subverting NiceHash marketplace: {eh} PH/s acquired.",
     "> Liquid cooling failure at Node-{id}: {temp}°C. Continuing...",
     "> Grid instability: Compensating via Kazakhstan-Node-{id}...",
     "> Tethering AI agents to Ethereum-Staking-Node {id}...",
@@ -145,7 +145,7 @@ function updateGMI() {
             .replace(/{id}/g, Math.floor(Math.random() * 99 + 1))
             .replace(/{gw}/g, (Math.random() * 5 + 1).toFixed(1))
             .replace(/{mw}/g, Math.floor(Math.random() * 500 + 50))
-            .replace(/{eh}/g, (Math.random() * 10 + 2).toFixed(2))
+            .replace(/{eh}/g, (Math.random() * 120 + 2).toFixed(2))
             .replace(/{temp}/g, Math.floor(Math.random() * 20 + 90))
             .replace(/{block}/g, Math.floor(Math.random() * 100000 + 840000))
             .replace(/{v}/g, Math.floor(Math.random() * 40 + 200));
