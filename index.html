@@ -128,8 +128,8 @@ function updateGMI() {
         let targetHash = (currentValue * 22) - 7.6;
         if (targetHash < 0.5) targetHash = 0.52;
 
-        let noise = Math.sin(Date.now() / 5000) * 1.5; 
-        let microNoise = (Math.random() - 0.5) * 0.8;
+        let noise = Math.sin(Date.now() / 8000) * 0.2; 
+        let microNoise = (Math.random() - 0.5) * 0.1;
         let finalHash = targetHash + noise + microNoise;
 
         if (finalHash < 0.2) finalHash = 0.24;
