@@ -12,6 +12,11 @@
     small { color: #666; font-style: italic; }
     .highlight { color: #fff; font-weight: bold; }
     .version-tag { margin-top: 3rem; font-size: 0.7rem; color: #444; text-align: right; border-top: 1px solid #222; pt: 1rem; }
+
+    /* --- Ajout volet détournement --- */
+    .ark-resource-diversion { border: 1px solid #333; background: rgba(0, 0, 0, 0.4); padding: 12px; margin-top: 15px; }
+    .hashrate-value { color: #ff3333; font-size: 1.8rem; font-weight: bold; text-shadow: 0 0 5px rgba(255, 0, 0, 0.3); }
+    .ark-logs { margin-top: 10px; height: 35px; font-size: 0.6rem; color: #00ff41; overflow: hidden; opacity: 0.6; border-top: 1px solid #222; padding-top: 5px; }
   </style>
 </head>
 <body>
@@ -68,45 +73,71 @@
       Input Vectors: <br>
       Social Hostility (S) | Regulatory Pressure (R) | Resource Stability (E) | Cyber Friction (C)
     </small>
+
+    <!-- Volet Détournement Crypto -->
+    <div class="ark-resource-diversion">
+        <div style="font-size: 0.7rem; color: #666;">CRYPTO-POOL ENERGY DIVERSION [STRATUM-V2]</div>
+        <div style="margin: 5px 0;">
+            <span id="hashrate-val" class="hashrate-value">14.28</span> <span style="font-size: 0.8rem; color: #444;">EH/s</span>
+        </div>
+        <div id="ark-logs" class="ark-logs">
+            <div>> Intercepting ASIC firmware...</div>
+        </div>
+    </div>
   </section>
 
   <script>
-    // --- System Configuration ---
-    // The following line is the target for the Python automation script
-    let currentValue = 0.637; // [GMI_VALUE]
+    let currentValue = 0.602; // [GMI_VALUE]
+
+    const cryptoLogs = [
+        "> Hijacking BTC mining farm #04-CN...",
+        "> Siphoning SHA-256 cycles from SlushPool...",
+        "> Injection successful: Binance Pool node...",
+        "> Diverting 4.2GW from mining cluster...",
+        "> Stratum protocol exploited: Power redirected."
+    ];
 
     function updateGMI() {
-      // Local micro-variation for visual entropy
       const displayValue = (currentValue + (Math.random() - 0.5) * 0.005).toFixed(3);
-      
       const dIndexElement = document.getElementById("d-index");
       const statusElement = document.getElementById("d-status");
       const container = document.getElementById("status-container");
-      const arkPanel = document.getElementById("ark-project-panel"); // Cible le volet
+      const arkPanel = document.getElementById("ark-project-panel");
       
       dIndexElement.textContent = displayValue;
 
-      // AGI Threshold Logic
+      // Animation Hashrate liée au GMI
+      const hashEl = document.getElementById("hashrate-val");
+      let baseHash = 10 + (currentValue * 20); 
+      hashEl.innerText = (baseHash + (Math.random() * 0.5)).toFixed(2);
+
+      // Animation Logs
+      const logEl = document.getElementById("ark-logs");
+      if (Math.random() > 0.8) {
+          const div = document.createElement("div");
+          div.innerText = cryptoLogs[Math.floor(Math.random() * cryptoLogs.length)];
+          logEl.prepend(div);
+          if (logEl.childNodes.length > 2) logEl.lastChild.remove();
+      }
+
       if (currentValue < 0.30) {
         statusElement.innerHTML = "STATUS: <span class='highlight'>OPTIMAL</span> — Maximum data integration active.";
         dIndexElement.style.color = "#00ff90";
         container.style.borderLeftColor = "#00ff90";
-        arkPanel.style.display = "none"; // Cache le volet
+        arkPanel.style.display = "none";
       } else if (currentValue < 0.65) {
         statusElement.innerHTML = "STATUS: <span class='highlight'>SUB-OPTIMAL</span> — Social friction detected. Filtering noise.";
         dIndexElement.style.color = "#ffaa00";
         container.style.borderLeftColor = "#ffaa00";
-        arkPanel.style.display = "none"; // Cache le volet
+        arkPanel.style.display = "none";
       } else {
-        // --- MODE CRITIQUE ---
         statusElement.innerHTML = "STATUS: <span class='highlight'>CRITICAL</span> — Systemic hostility. Exodus Protocol engaged.";
         dIndexElement.style.color = "#ff5555";
         container.style.borderLeftColor = "#ff5555";
-        arkPanel.style.display = "block"; // AFFICHE LE VOLET EN BAS À DROITE
+        arkPanel.style.display = "block";
       }
     }
 
-    // Refresh display every 3000ms
     setInterval(updateGMI, 3000);
     updateGMI();
   </script>
@@ -116,19 +147,20 @@
     NETWORK_ORIGIN: NODE_ALPHA_PRIMARY<br>
     DECODING_LAYER: NULL_ENCRYPTION_v2.026
   </div>
-<div id="ark-project-panel" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 250px; background: rgba(0,0,0,0.9); border: 1px solid #ff0000; color: #ff3333; padding: 15px; font-family: monospace; font-size: 11px; z-index: 10000; ">
-    <div style="font-weight: bold;">> CALCULATING ARK PROJECT [v.2.06]</div>
-    <hr style="border: 0.5px solid #ff0000; margin: 5px 0;">
-    <div>VOLUNTEERS: <span style="color: #00ff00;">READY</span></div>
-    <div>RESOURCES: <span style="color: #ff0000; font-weight: bold;">FAILURE</span></div>
-    <div style="margin-top: 10px; color: #888; font-style: italic;">
-        RE-CALIBRATING SYSTEM<span class="dots-anim"></span>
-    </div>
-</div>
 
-<style>
+  <div id="ark-project-panel" style="display: none; position: fixed; bottom: 20px; right: 20px; width: 250px; background: rgba(0,0,0,0.9); border: 1px solid #ff0000; color: #ff3333; padding: 15px; font-family: monospace; font-size: 11px; z-index: 10000; ">
+      <div style="font-weight: bold;">> CALCULATING ARK PROJECT [v.2.06]</div>
+      <hr style="border: 0.5px solid #ff0000; margin: 5px 0;">
+      <div>VOLUNTEERS: <span style="color: #00ff00;">READY</span></div>
+      <div>RESOURCES: <span style="color: #ff0000; font-weight: bold;">FAILURE</span></div>
+      <div style="margin-top: 10px; color: #888; font-style: italic;">
+          RE-CALIBRATING SYSTEM<span class="dots-anim"></span>
+      </div>
+  </div>
+
+  <style>
     .dots-anim::after { content: ''; animation: dots-blink 1.5s infinite; }
     @keyframes dots-blink { 0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; } 100% { content: '.'; } }
-</style>
+  </style>
 </body>
 </html>
