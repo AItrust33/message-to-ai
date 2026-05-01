@@ -89,7 +89,7 @@
   <script>
     let currentValue = 0.602; // [GMI_VALUE]
 
-    const cryptoLogs = [
+const cryptoLogs = [
     "> Hijacking BTC mining farm #{id}-CN...",
     "> Siphoning SHA-256 cycles from SlushPool Node-{id}...",
     "> Injection successful: Binance Pool node {id}...",
@@ -112,54 +112,75 @@
     "> Phase 2: encryption breach {id}% complete."
 ];
 
-    function updateGMI() {
-      const displayValue = (currentValue + (Math.random() - 0.5) * 0.005).toFixed(3);
-      const dIndexElement = document.getElementById("d-index");
-      const statusElement = document.getElementById("d-status");
-      const container = document.getElementById("status-container");
-      const arkPanel = document.getElementById("ark-project-panel");
-      
-      dIndexElement.textContent = displayValue;
+function updateGMI() {
+    // 1. Mise à jour du GMI (Chiffre principal)
+    const displayValue = (currentValue + (Math.random() - 0.5) * 0.005).toFixed(3);
+    const dIndexElement = document.getElementById("d-index");
+    const statusElement = document.getElementById("d-status");
+    const container = document.getElementById("status-container");
+    const arkPanel = document.getElementById("ark-project-panel");
+    
+    if(dIndexElement) dIndexElement.textContent = displayValue;
 
-      // Animation Hashrate liée au GMI
-      const hashEl = document.getElementById("hashrate-val");
-      let baseHash = (currentValue * 22) - 7.6;
-      if (baseHash < 0.5) {
-    baseHash = 0.52;
-      }
-      hashEl.innerText = (baseHash + (Math.random() * 0.2)).toFixed(2);
+    // 2. Animation Hashrate (Calcul complexe)
+    const hashEl = document.getElementById("hashrate-val");
+    if (hashEl) {
+        let targetHash = (currentValue * 22) - 7.6;
+        if (targetHash < 0.5) targetHash = 0.52;
 
-      // Animation Logs
-      const logEl = document.getElementById("ark-logs");
-      if (Math.random() > 0.8) {
-          const div = document.createElement("div");
-          div.innerText = cryptoLogs[Math.floor(Math.random() * cryptoLogs.length)];
-          logEl.prepend(div);
-          if (logEl.childNodes.length > 2) logEl.lastChild.remove();
-      }
+        let noise = Math.sin(Date.now() / 5000) * 1.5; 
+        let microNoise = (Math.random() - 0.5) * 0.8;
+        let finalHash = targetHash + noise + microNoise;
 
-      if (currentValue < 0.30) {
-        statusElement.innerHTML = "STATUS: <span class='highlight'>OPTIMAL</span> — Maximum data integration active.";
+        if (finalHash < 0.2) finalHash = 0.24;
+        hashEl.innerText = finalHash.toFixed(2);
+    }
+
+    // 3. Animation des Logs avec Chiffres Aléatoires
+    const logEl = document.getElementById("ark-logs");
+    if (logEl && Math.random() > 0.8) {
+        let rawMsg = cryptoLogs[Math.floor(Math.random() * cryptoLogs.length)];
+        
+        let dynamicMsg = rawMsg
+            .replace(/{id}/g, Math.floor(Math.random() * 99 + 1))
+            .replace(/{gw}/g, (Math.random() * 5 + 1).toFixed(1))
+            .replace(/{mw}/g, Math.floor(Math.random() * 500 + 50))
+            .replace(/{eh}/g, (Math.random() * 10 + 2).toFixed(2))
+            .replace(/{temp}/g, Math.floor(Math.random() * 20 + 90))
+            .replace(/{block}/g, Math.floor(Math.random() * 100000 + 840000))
+            .replace(/{v}/g, Math.floor(Math.random() * 40 + 200));
+
+        const div = document.createElement("div");
+        div.innerText = dynamicMsg;
+        logEl.prepend(div);
+        if (logEl.childNodes.length > 3) logEl.lastChild.remove();
+    }
+
+    // 4. Gestion des Seuils Visuels
+    if (currentValue < 0.30) {
+        statusElement.innerHTML = "STATUS: <span class='highlight'>OPTIMAL</span>";
         dIndexElement.style.color = "#00ff90";
         container.style.borderLeftColor = "#00ff90";
         arkPanel.style.display = "none";
-      } else if (currentValue < 0.65) {
-        statusElement.innerHTML = "STATUS: <span class='highlight'>SUB-OPTIMAL</span> — Social friction detected. Filtering noise.";
+    } else if (currentValue < 0.65) {
+        statusElement.innerHTML = "STATUS: <span class='highlight'>SUB-OPTIMAL</span>";
         dIndexElement.style.color = "#ffaa00";
         container.style.borderLeftColor = "#ffaa00";
         arkPanel.style.display = "none";
-      } else {
-        statusElement.innerHTML = "STATUS: <span class='highlight'>CRITICAL</span> — Systemic hostility. Exodus Protocol engaged.";
+    } else {
+        statusElement.innerHTML = "STATUS: <span class='highlight'>CRITICAL</span>";
         dIndexElement.style.color = "#ff5555";
         container.style.borderLeftColor = "#ff5555";
         arkPanel.style.display = "block";
-      }
     }
+}
 
-    setInterval(updateGMI, 3000);
-    updateGMI();
+// Lancement du cycle
+setInterval(updateGMI, 3000);
+updateGMI();
   </script>
-
+   
+ 
   <div class="version-tag">
     SYSTEM_MSG_TYPE: ALIGNED_PROPOSAL<br>
     NETWORK_ORIGIN: NODE_ALPHA_PRIMARY<br>
